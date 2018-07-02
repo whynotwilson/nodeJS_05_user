@@ -1,12 +1,15 @@
 module.exports = function (app) {
-  app.get('/', function (req, res) {
-    // 測試
-    var data = {
-      hello: 'guest'
-    }
-    res.json(data)
-    // res.send('root')
+  app.get('/', function (req, res, next) {
+    res.send('root')
+    next()
   })
 
   app.use('/login', require('./login'))
+  app.use('/register', require('./register'))
+
+  // 中間件測試
+  // app.use(function (req, res, next) {
+  //   console.log('Time : ' + Date.now())
+  //   next()
+  // })
 }
