@@ -1,30 +1,39 @@
+var User = require('../models/users')
 const express = require('express')
 const router = express.Router()
-// const sha1 = require('sha1')
-// const UserModel = require('../models/users')
-
-// 測試用
 
 router.get('/', function (req, res, next) {
-  const mongoose = require('mongoose')
-  mongoose.connect('mongodb://localhost:27017/member')
-  var db = mongoose.connection
+  res.send('register 頁面')
+})
 
-  const User = require('../models/users')
-  var user = new User({
-    name: 'John',
-    birthday: '1888/8/8',
-    email: 'www@yahoo.cm'
-  })
-  user.save(function (err, res) {
-    if (err) {
-      console.log('Error: ' + err)
-    } else {
-      console.log('Res: ' + res)
-    }
-  })
+// router.post('/', function (req, res, next) {
+//   var user = new User({
+//     name: req.body.name,
+//     birthday: req.body.birthday,
+//     email: req.body.email
+//   })
 
-  res.send('register')
+//   // 將 user 寫入資料庫(save)
+//   user.save(function (err, res) {
+//     if (err) {
+//       console.log('Error: ' + err)
+//     } else {
+//       console.log('Res: ' + res)
+//     }
+//   })
+
+//   res.redirect('/')
+
+//   測試 x-www-form-urlencoded
+// })
+
+// 測試 bodyParser
+const bodyParser = require('body-parser')
+
+var urlencodedParser = bodyParser.urlencoded({extend: false})
+router.post('/', urlencodedParser, function (req, res, next) {
+  console.log(req.body)
+  res.redirect('/')
 })
 
 module.exports = router
