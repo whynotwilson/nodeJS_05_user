@@ -3,36 +3,38 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', function (req, res, next) {
-  res.send('register 頁面')
+  res.render('register')
 })
 
-// router.post('/', function (req, res, next) {
-//   var user = new User({
-//     name: req.body.name,
-//     birthday: req.body.birthday,
-//     email: req.body.email
-//   })
+router.post('/', function (req, res, next) {
+  var user = new User({
+    account: req.fields.account,
+    password: req.fields.password,
+    repassword: req.fields.repassword,
+    birthday: req.fields.birthday,
+    email: req.fields.email
+  })
+  // const avatar = req.files
 
-//   // 將 user 寫入資料庫(save)
-//   user.save(function (err, res) {
-//     if (err) {
-//       console.log('Error: ' + err)
-//     } else {
-//       console.log('Res: ' + res)
-//     }
-//   })
+  console.log(req.fields)
+  console.log(user)
 
-//   res.redirect('/')
+  // ==========================================
+  // 參考用，暫時不知道
+  // const avatar = req.files.avatar.path.split(path.sep).pop()
+  // 暫時不知道意思
 
-//   測試 x-www-form-urlencoded
-// })
+  // console.log('圖片： ' + avatar)
 
-// 測試 bodyParser
-const bodyParser = require('body-parser')
+  // 將 user 寫入資料庫(save)
+  // user.save(function (err, res) {
+  //   if (err) {
+  //     console.log('Error: ' + err)
+  //   } else {
+  //     console.log('Res: ' + res)
+  //   }
+  // })
 
-var urlencodedParser = bodyParser.urlencoded({extend: false})
-router.post('/', urlencodedParser, function (req, res, next) {
-  console.log(req.body)
   res.redirect('/')
 })
 
