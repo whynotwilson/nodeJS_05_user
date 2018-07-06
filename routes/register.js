@@ -33,7 +33,8 @@ router.post('/', function (req, res, next) {
       throw new Error('生日格式不正確')
     }
   } catch (e) {
-    return res.redirect('/register')
+    console.log('register catch')
+    // return res.redirect('/register')
   }
 
   var user = new User({
@@ -47,15 +48,21 @@ router.post('/', function (req, res, next) {
   console.log(user)
 
   // 將 user 寫入資料庫(save)
-  // user.save(function (err, res) {
-  //   if (err) {
-  //     console.log('Error: ' + err)
-  //   } else {
-  //     console.log('Res: ' + res)
-  //   }
-  // })
-
-  res.redirect('/')
+  user.save(function (err, res) {
+    if (err) {
+      console.log('Error: ' + err)
+    } else {
+      console.log('Res: ' + res)
+    }
+  })
+    .then(function (result) {
+      console.log('註冊成功')
+      res.redirect('/')
+    })
+    .catch(function (e) {
+      console.log('註冊失敗')
+      return res.redirect('/register')
+    })
 })
 
 module.exports = router
