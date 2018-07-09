@@ -28,12 +28,13 @@ router.post('/', function (req, res, next) {
     if (password !== repassword) {
       throw new Error('兩次輸入密碼不一致')
     }
-    const re = /\d{8}/
-    if (!re.test(birthday)) {
+    const reg = /\d{8}/
+    if (!reg.test(birthday)) {
       throw new Error('生日格式不正確')
     }
   } catch (e) {
     console.log('register catch')
+    console.log(e)
     // return res.redirect('/register')
   }
 
@@ -55,14 +56,14 @@ router.post('/', function (req, res, next) {
       console.log('Res: ' + res)
     }
   })
-    .then(function (result) {
-      console.log('註冊成功')
-      res.redirect('/')
-    })
-    .catch(function (e) {
-      console.log('註冊失敗')
-      return res.redirect('/register')
-    })
+  // .then(function (result) {
+  //   console.log('註冊成功')
+  //   res.redirect('/')
+  // })
+  // .catch(function (e) {
+  //   console.log('註冊失敗')
+  //   return res.redirect('/register')
+  // })
 })
 
 module.exports = router
