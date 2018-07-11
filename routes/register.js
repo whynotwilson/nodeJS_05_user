@@ -2,6 +2,7 @@ var User = require('../models/users')
 const express = require('express')
 const router = express.Router()
 const path = require('path')
+const fs = require('fs')
 
 router.get('/', function (req, res, next) {
   res.render('register')
@@ -19,7 +20,7 @@ router.post('/', function (req, res, next) {
 
   // 檢查參數
   try {
-    if (!(account.length < 6 && account.length > 10)) {
+    if (account.length < 6 || account.length > 10) {
       throw new Error('帳號請限制在6-10個字元')
     }
     if (password.length < 6) {
@@ -33,10 +34,13 @@ router.post('/', function (req, res, next) {
       throw new Error('生日格式不正確')
     }
   } catch (e) {
-    console.log('register catch')
     console.log(e)
-    // return res.redirect('/register')
+    // 註冊失敗，異步刪除上傳的頭像
+    fs.unlink(req.files.avatar.path, () => console.log('已經刪除照片'))
+    return res.redirect('/register')
   }
+
+  console.log('註冊成功')
 
   var user = new User({
     account: req.fields.account,
@@ -56,14 +60,14 @@ router.post('/', function (req, res, next) {
       console.log('Res: ' + res)
     }
   })
-  // .then(function (result) {
-  //   console.log('註冊成功')
-  //   res.redirect('/')
-  // })
-  // .catch(function (e) {
-  //   console.log('註冊失敗')
-  //   return res.redirect('/register')
-  // })
+    .then(function (result) {
+      console.log('註冊成功')
+      res.redirect('/')
+    })
+    .catch(function (e) {
+      console.log('註冊失敗')
+      return res.redirect('/register')
+    })
 })
 
 module.exports = router
