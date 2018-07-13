@@ -26,7 +26,7 @@ app.use(session({
     maxAge: config.session.maxAge // 過期時間，過期後 cookie 中的 session_id 自動刪除
   },
   store: new MongoStore({
-    url: config.mongodb
+    url: config.mongodb // 儲存到mongoDB
   })
 }))
 
@@ -36,20 +36,22 @@ app.use(flash())
 // 處理表單及文件上傳的中間件
 app.use(require('express-formidable')({
   uploadDir: path.join(__dirname, 'public/img'), // 上傳文件(頭像)目錄
-  keepExtensions: true // 保留後綴
+  keepExtensions: true // 保留後綴 .img .png 等等
 }))
 
 // 設定模板全局常量
 // app.locals(key, value) 是全局的
 // res.locals() 是針對當前請求的
-app.locals.user = {
+app.locals.member = {
   title: pkg.name,
   description: pkg.description // ?
 }
 
+// 設定模板必須的三個變量
 app.use(function (req, res, next) {
-  app.locals.success = req.flash('success').toString()
-  app.locals.error = req.flash('error').toString()
+  // res.locals.user = req.session.user
+  res.locals.success = req.flash('success').toString()
+  res.locals.error = req.flash('error').toString()
   next()
 })
 
