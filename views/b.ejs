@@ -1,3 +1,35 @@
 <%- include('header') %>
-</body>
-</html>
+<form method="POST" enctype="multipart/form-data">
+  <div class="required">
+    <label>帳號</label>
+    <input type="text" name="account" placeholder="請輸入帳號">
+  </div>
+
+  <div class="required">
+    <label>密碼</label>
+    <input type="password" name="password" placeholder="請輸入密碼">
+  </div>
+
+  <div class="required">
+    <label>重複密碼</label>
+    <input type="password" name="repassword" placeholder="請重複密碼">
+  </div>
+
+  <div class="required">
+    <label>生日</label>
+    <input type="text" name="birthday" placeholder="生日格式 Ex:19990909" maxlength="8">
+  </div>
+
+  <div class="required">
+    <label>E-mail</label>
+    <input type="email" name="email" placeholder="請輸入E-mail">
+  </div>
+
+  <div class="required">
+    <label>頭像</label>
+    <input type="file" name="avatar">
+  </div>
+
+  <input type="button" value="取消">
+  <input type="submit" value="註冊">
+</form>

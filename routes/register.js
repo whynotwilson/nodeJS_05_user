@@ -34,12 +34,15 @@ router.post('/', function (req, res, next) {
       throw new Error('生日格式不正確')
     }
   } catch (e) {
-    console.log(e)
     // 註冊失敗，異步刪除上傳的頭像
+
     fs.unlink(req.files.avatar.path, () => console.log('已經刪除照片'))
+    console.log(e.message)
+    req.flash('error', e.message)
+
     return res.redirect('/register')
   }
-
+/*
   console.log('註冊成功')
 
   var user = new User({
@@ -68,6 +71,7 @@ router.post('/', function (req, res, next) {
       console.log('註冊失敗')
       return res.redirect('/register')
     })
+*/
 })
 
 module.exports = router

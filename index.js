@@ -4,7 +4,7 @@ const routes = require('./routes')
 const path = require('path')
 const flash = require('connect-flash')
 const session = require('express-session')
-const pkg = require('package') // ?
+const pkg = require('./package')
 const MongoStore = require('connect-mongo')(session)
 const config = require('config-lite')(__dirname)
 
@@ -44,6 +44,7 @@ app.use(require('express-formidable')({
 // res.locals() 是針對當前請求的
 app.locals.member = {
   title: pkg.name,
+  // title: 'test title',
   description: pkg.description // ?
 }
 
