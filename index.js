@@ -36,7 +36,7 @@ app.use(flash())
 // 處理表單及文件上傳的中間件
 app.use(require('express-formidable')({
   uploadDir: path.join(__dirname, 'public/img'), // 上傳文件(頭像)目錄
-  keepExtensions: true // 保留後綴 .img .png 等等
+  keepExtensions: true // 保留後綴(副檔名) .img .png 等等
 }))
 
 // 設定模板全局常量

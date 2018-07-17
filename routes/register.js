@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const fs = require('fs')
+const sha1 = require('sha1')
 
 router.get('/', function (req, res, next) {
   res.render('register')
@@ -13,49 +14,77 @@ router.post('/', function (req, res, next) {
   let password = req.fields.password
   // const avatar = req.files.avatar.path.split(path.sep).pop()
   const repassword = req.fields.repassword
-  const birthday = req.fields.birthday
   const email = req.fields.email
 
   console.log(req.fields)
 
   // 檢查參數
   try {
-    if (account.length < 6 || account.length > 10) {
-      throw new Error('帳號請限制在6-10個字元')
+    // 帳號和密碼規則，只有英文、底線和數字
+    const Rule = /[A-Za-z0-9_]/
+    if (account.length < 6 || account.length > 12) {
+      throw new Error('帳號請限制在6-12個字元')
+    }
+    if (!Rule.test(account)) {
+      console.log(!Rule.test(account))
+      throw new Error('帳號格式不正確，只能使用英文、數字和底線')
     }
     if (password.length < 6) {
       throw new Error('密碼最少6個字')
     }
+    if (!Rule.test(password)) {
+      throw new Error('密碼格式不正確，只能使用英文、數字和底線')
+    }
     if (password !== repassword) {
       throw new Error('兩次輸入密碼不一致')
     }
-    const reg = /\d{8}/
-    if (!reg.test(birthday)) {
-      throw new Error('生日格式不正確')
+    const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
+    // ^\w+：@ 之前必須以一個以上的文字&數字開頭，例如 abc
+    // ((-\w+)：@ 之前可以出現 1 個以上的文字、數字或「-」的組合，例如 -abc-
+    // (\.\w+))：@ 之前可以出現 1 個以上的文字、數字或「.」的組合，例如 .abc.
+    // ((-\w+)|(\.\w+))*：以上兩個規則以 or 的關係出現，並且出現 0 次以上 (所以不能 –. 同時出現)
+    // @：中間一定要出現一個 @
+    // [A-Za-z0-9]+：@ 之後出現 1 個以上的大小寫英文及數字的組合
+    // (\.|-)：@ 之後只能出現「.」或是「-」，但這兩個字元不能連續時出現
+    // ((\.|-)[A-Za-z0-9]+)*：@ 之後出現 0 個以上的「.」或是「-」配上大小寫英文及數字的組合
+    // \.[A-Za-z]+$/：@ 之後出現 1 個以上的「.」配上大小寫英文及數字的組合，結尾需為大小寫英文
+    if (!emailRule.test(email)) {
+      throw new Error('E-mail 格式不正確')
     }
   } catch (e) {
     // 註冊失敗，異步刪除上傳的頭像
-
-    fs.unlink(req.files.avatar.path, () => console.log('已經刪除照片'))
+    fs.unlink(req.files.avatar.path, () => console.log('刪除已上傳的頭像'))
     console.log(e.message)
     req.flash('error', e.message)
 
     return res.redirect('/register')
   }
-/*
-  console.log('註冊成功')
+
+  // 明文密碼加密
+  password = sha1(password)
 
   var user = new User({
     account: req.fields.account,
     password: req.fields.password,
-    repassword: req.fields.repassword,
-    birthday: req.fields.birthday,
-    email: req.fields.email
+    email: req.fields.email,
+    avatar: req.fields.avatar
   })
 
   console.log(user)
 
   // 將 user 寫入資料庫(save)
+  try {
+    user.save(function (err, res) {
+      if (err) {
+        console.log('Error: ' + err)
+      } else {
+        console.log('Res: ' + res)
+      }
+    })
+  } catch (e) {
+    console.log('註冊失敗')
+    return res.redirect('/register')
+  }
   user.save(function (err, res) {
     if (err) {
       console.log('Error: ' + err)
@@ -71,7 +100,6 @@ router.post('/', function (req, res, next) {
       console.log('註冊失敗')
       return res.redirect('/register')
     })
-*/
 })
 
 module.exports = router
