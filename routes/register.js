@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next) {
   const account = req.fields.account
   let password = req.fields.password
-  // const avatar = req.files.avatar.path.split(path.sep).pop()
+  const avatar = req.files.avatar.path.split(path.sep).pop()
   const repassword = req.fields.repassword
   const email = req.fields.email
 
@@ -20,19 +20,17 @@ router.post('/', function (req, res, next) {
 
   // 檢查參數
   try {
-    // 帳號和密碼規則，只有英文、底線和數字
-    const Rule = /[A-Za-z0-9_]/
+    const Rule = /\W/ // 帳號和密碼規則，只能英文、底線和數字
     if (account.length < 6 || account.length > 12) {
       throw new Error('帳號請限制在6-12個字元')
     }
-    if (!Rule.test(account)) {
-      console.log(!Rule.test(account))
+    if (Rule.test(account)) {
       throw new Error('帳號格式不正確，只能使用英文、數字和底線')
     }
     if (password.length < 6) {
       throw new Error('密碼最少6個字')
     }
-    if (!Rule.test(password)) {
+    if (Rule.test(password)) {
       throw new Error('密碼格式不正確，只能使用英文、數字和底線')
     }
     if (password !== repassword) {
@@ -67,7 +65,7 @@ router.post('/', function (req, res, next) {
     account: req.fields.account,
     password: req.fields.password,
     email: req.fields.email,
-    avatar: req.fields.avatar
+    avatar: avatar
   })
 
   console.log(user)
@@ -81,25 +79,27 @@ router.post('/', function (req, res, next) {
         console.log('Res: ' + res)
       }
     })
+    req.flash('success', '註冊成功')
+    res.redirect('member')
   } catch (e) {
     console.log('註冊失敗')
     return res.redirect('/register')
   }
-  user.save(function (err, res) {
-    if (err) {
-      console.log('Error: ' + err)
-    } else {
-      console.log('Res: ' + res)
-    }
-  })
-    .then(function (result) {
-      console.log('註冊成功')
-      res.redirect('/')
-    })
-    .catch(function (e) {
-      console.log('註冊失敗')
-      return res.redirect('/register')
-    })
+  // user.save(function (err, res) {
+  //   if (err) {
+  //     console.log('Error: ' + err)
+  //   } else {
+  //     console.log('Res: ' + res)
+  //   }
+  // })
+  //   .then(function (result) {
+  //     console.log('註冊成功')
+  //     res.redirect('/')
+  //   })
+  //   .catch(function (e) {
+  //     console.log('註冊失敗')
+  //     return res.redirect('/register')
+  //   })
 })
 
 module.exports = router
