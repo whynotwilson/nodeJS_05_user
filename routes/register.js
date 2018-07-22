@@ -46,7 +46,7 @@ router.post('/', function (req, res, next) {
     // (\.|-)：@ 之後只能出現「.」或是「-」，但這兩個字元不能連續時出現
     // ((\.|-)[A-Za-z0-9]+)*：@ 之後出現 0 個以上的「.」或是「-」配上大小寫英文及數字的組合
     // \.[A-Za-z]+$/：@ 之後出現 1 個以上的「.」配上大小寫英文及數字的組合，結尾需為大小寫英文
-    if (!emailRule.test(email)) {
+    if (!emailRule.test(email)) { // test() 如果有找到符合的字串會回傳 true
       throw new Error('E-mail 格式不正確')
     }
   } catch (e) {
@@ -68,8 +68,6 @@ router.post('/', function (req, res, next) {
     avatar: avatar
   })
 
-  console.log(user)
-
   // 將 user 寫入資料庫(save)
   try {
     user.save(function (err, res) {
@@ -79,11 +77,12 @@ router.post('/', function (req, res, next) {
         console.log('Res: ' + res)
       }
     })
+    delete user.password // 刪除密碼這種敏感的訊息
     req.flash('success', '註冊成功')
     res.redirect('member')
   } catch (e) {
     console.log('註冊失敗')
-    return res.redirect('/register')
+    return res.redirect('/')
   }
   // user.save(function (err, res) {
   //   if (err) {

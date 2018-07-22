@@ -18,6 +18,7 @@ module.exports = function (app) {
   // })
   app.use('/login', require('./login'))
   app.use('/register', require('./register'))
+  app.use('/member', require('./member'))
 
   // 中間件測試
   // app.use(function (req, res, next) {
