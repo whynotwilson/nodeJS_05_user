@@ -3,4 +3,8 @@ config/*
 npm-debug.log
 node_modules
 coverage
-public/img
+public/img/*.jpg
+public/img/*.png
+public/img/*.jpeg
+public/img/*.gif
+public/img/*.bmp
