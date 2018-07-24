@@ -16,8 +16,6 @@ router.post('/', function (req, res, next) {
   const repassword = req.fields.repassword
   const email = req.fields.email
 
-  console.log(req.fields)
-
   // 檢查參數
   try {
     const Rule = /\W/ // 帳號和密碼規則，只能英文、底線和數字
@@ -36,7 +34,7 @@ router.post('/', function (req, res, next) {
     if (password !== repassword) {
       throw new Error('兩次輸入密碼不一致')
     }
-    const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
+    const emailRule = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
     // ^\w+：@ 之前必須以一個以上的文字&數字開頭，例如 abc
     // ((-\w+)：@ 之前可以出現 1 個以上的文字、數字或「-」的組合，例如 -abc-
     // (\.\w+))：@ 之前可以出現 1 個以上的文字、數字或「.」的組合，例如 .abc.
@@ -78,6 +76,7 @@ router.post('/', function (req, res, next) {
       }
     })
     delete user.password // 刪除密碼這種敏感的訊息
+    req.session.user = user
     req.flash('success', '註冊成功')
     res.redirect('member')
   } catch (e) {

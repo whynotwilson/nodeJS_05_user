@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const path = require('path')
-const fs = require('fs')
 
-router.get('/', function(req, res, next) {
-  // req.flash('success', '註冊成功')
-  res.render('member')
+// 登入寫完再改
+router.get('/', function (req, res, next) {
+  const email = req.session.user.email
+  const avatar = 'img/' + req.session.user.avatar
+
+  res.render('member', {img: avatar, email: email})
 })
 
 module.exports = router

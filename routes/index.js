@@ -1,6 +1,6 @@
 module.exports = function (app) {
   app.get('/', function (req, res, next) {
-    res.send('root')
+    res.redirect('member')
   })
 
   // 測試 connect-flash 顯示通知功能

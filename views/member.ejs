@@ -1,4 +1,12 @@
 <%- include('header') %>
-  member test
+  <%- include('components/content-left') %>
+  <div class="content-right">
+    <div>
+      email：<%= email %>
+    </div>
+    <div>
+      <img src= <%= img %> alt="avatar">
+    </div>
+  </div>
 </body>
 </html>
