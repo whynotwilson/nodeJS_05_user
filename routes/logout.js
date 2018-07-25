@@ -1,13 +1,16 @@
 const express = require('express')
 const router = express.Router()
+
 const checkLogin = require('../middlewares/check').checkLogin
 
-// 登入寫完再改
+// GET // logout 登出
 router.get('/', checkLogin, function (req, res, next) {
-  const email = req.session.user.email
-  const avatar = 'img/' + req.session.user.avatar
-  const user = req.session.user
-  res.render('member', {img: avatar, email: email, user: user})
+  // 清空 session 中用戶信息
+  req.session.user = null
+  req.flash('success', '成功登出')
+
+  // 登出成功後跳轉到首頁
+  res.redirect('/')
 })
 
 module.exports = router

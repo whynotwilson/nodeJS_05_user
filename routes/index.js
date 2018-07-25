@@ -1,6 +1,7 @@
 module.exports = function (app) {
   app.get('/', function (req, res, next) {
-    res.redirect('member')
+    // res.redirect('member')
+    res.render('root')
   })
 
   // 測試 connect-flash 顯示通知功能
@@ -19,6 +20,7 @@ module.exports = function (app) {
   app.use('/login', require('./login'))
   app.use('/register', require('./register'))
   app.use('/member', require('./member'))
+  app.use('/logout', require('./logout'))
 
   // 中間件測試
   // app.use(function (req, res, next) {

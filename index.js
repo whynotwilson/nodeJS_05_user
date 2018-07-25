@@ -50,7 +50,7 @@ app.locals.member = {
 
 // 設定模板必須的三個變量
 app.use(function (req, res, next) {
-  // res.locals.user = req.session.user
+  res.locals.user = req.session.user
   res.locals.success = req.flash('success').toString()
   res.locals.error = req.flash('error').toString()
   next()
