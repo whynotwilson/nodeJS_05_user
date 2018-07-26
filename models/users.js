@@ -5,7 +5,7 @@ var Schema = mongoose.Schema
 // schema 是 mongoose 裡會用到的一種數據模式，可以理解為表結構的定義，
 // 每個 schema 會對應到 mongoDB 中的一個 collection，它不具備操作資料庫的能力。
 var UserSchema = new Schema({
-  account: {type: String},
+  account: {type: String, unique: true},
   password: {type: String},
   email: {type: String},
   avatar: {type: String}

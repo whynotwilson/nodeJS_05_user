@@ -77,17 +77,21 @@ router.post('/', checkNotLogin, function (req, res, next) {
   try {
     user.save(function (err, res) {
       if (err) {
-        console.log('Error: ' + err)
+        console.log('Error: ' + err.message)
       } else {
         console.log('Res: ' + res)
       }
     })
     delete user.password // 刪除密碼這種敏感的訊息
-    req.session.user = user
-    req.flash('success', '註冊成功')
-    res.redirect('member')
+    // req.session.user = user
+    // req.flash('success', '註冊成功')
+    // res.redirect('member')
   } catch (e) {
     console.log('註冊失敗')
+    if (e.message.indexOf('duplicate key') !== -1) {
+      req.flash('error', '註冊失敗，帳號重複')
+      return res.redirect('/register')
+    }
     console.log(e.message)
     return res.redirect('/register')
   }
