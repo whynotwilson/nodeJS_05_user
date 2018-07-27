@@ -1,10 +1,10 @@
-var User = require('../models/users')
 const express = require('express')
 const router = express.Router()
 const path = require('path')
 const fs = require('fs')
 const sha1 = require('sha1')
 const checkNotLogin = require('../middlewares/check').checkNotLogin
+const UserModel = require('../models/users')
 
 router.get('/', checkNotLogin, function (req, res, next) {
   res.render('register', {user: false})
@@ -66,50 +66,54 @@ router.post('/', checkNotLogin, function (req, res, next) {
   // 明文密碼加密
   password = sha1(password)
 
-  var user = new User({
-    account: req.fields.account,
-    password: req.fields.password,
-    email: req.fields.email,
+  // 要用 let 因為這邊每個 function 的
+  let user = ({
+    account: account,
+    password: password,
+    email: email,
     avatar: avatar
   })
 
-  // 將 user 寫入資料庫(save)
-  try {
-    user.save(function (err, res) {
-      if (err) {
-        console.log('Error: ' + err.message)
-      } else {
-        console.log('Res: ' + res)
+  // promise 詳細說明
+  // https://eyesofkids.gitbooks.io/javascript-start-es6-promise/content/contents/promise_a_plus.html
+  // 淺談 promise(then、catch、resolve、reject、race、all、done、finally)
+  // https://blog.csdn.net/momDIY/article/details/77856099
+  UserModel.create(user)
+    .then(function (result) {
+      console.log('result: ') // 測試
+      console.log(result) /*
+      // result:
+      { _id: 5b5adc43eb1c2c1e84af49d6,
+        account: '999999',
+        password: '1f5523a8f535289b3401b29958d01b2966ed61d2',
+        email: '999999@hoo.com',
+        avatar: 'upload_faeb062343fd700de3977a50e9a05a7b.jpg',
+        __v: 0
       }
+      */
+
+      // 刪除密碼這種敏感的訊息，將用戶訊息存入 session
+      delete user.password
+      req.session.user = user
+      // 寫入 flash
+      req.flash('success', '註冊成功')
+
+      // 跳轉到會員頁
+      res.redirect('member')
     })
-    delete user.password // 刪除密碼這種敏感的訊息
-    // req.session.user = user
-    // req.flash('success', '註冊成功')
-    // res.redirect('member')
-  } catch (e) {
-    console.log('註冊失敗')
-    if (e.message.indexOf('duplicate key') !== -1) {
-      req.flash('error', '註冊失敗，帳號重複')
-      return res.redirect('/register')
-    }
-    console.log(e.message)
-    return res.redirect('/register')
-  }
-  // user.save(function (err, res) {
-  //   if (err) {
-  //     console.log('Error: ' + err)
-  //   } else {
-  //     console.log('Res: ' + res)
-  //   }
-  // })
-  //   .then(function (result) {
-  //     console.log('註冊成功')
-  //     res.redirect('/')
-  //   })
-  //   .catch(function (e) {
-  //     console.log('註冊失敗')
-  //     return res.redirect('/register')
-  //   })
+    .catch(function (e) {
+      console.log('註冊失敗')
+      console.log(e.message)
+      // 註冊失敗，異步刪除上傳的頭像
+      fs.unlink(req.files.avatar.path)
+
+      // 帳號重複，重新跳轉回註冊頁
+      if (e.message.indexOf('duplicate key')) {
+        req.flash('error', '註冊失敗，帳號已被使用')
+        return res.redirect('register')
+      }
+      next(e)
+    })
 })
 
 module.exports = router
