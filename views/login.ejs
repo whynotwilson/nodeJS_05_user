@@ -1,12 +1,12 @@
 <%- include('header') %>
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     <div>
       <label>帳號</label>
-      <input type="text" placeholder="請輸入帳號">
+      <input type="text" placeholder="請輸入帳號" name="account">
     </div>
     <div>
       <label>密碼</label>
-      <input type="text" placeholder="請輸入密碼">
+      <input type="password" placeholder="請輸入密碼" name="password">
     </div>
     <button type="submit">登入</button>
   </form>

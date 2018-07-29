@@ -4,5 +4,11 @@ module.exports = {
   // 註冊一個用戶
   create: function create (user) {
     return User.create(user)
+  },
+
+  getUserByAccount: function getUserByAccount (account) {
+    return User
+      .find({ account: account })
+      .exec()
   }
 }

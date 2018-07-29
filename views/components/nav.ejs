@@ -1,8 +1,14 @@
 <div class="menu">
   <% if (user) { %>
-    <a class="item" href="/logout">登出</a>
+    <button>
+      <a class="item" href="/logout">登出</a>
+    </button>
   <% } else { %>
-    <a class="item" href="/login">登入</a>
-    <a class="item" href="/register">註冊</a>
+    <button>
+      <a class="item" href="/login">登入</a>
+    </button>
+    <button>
+      <a class="item" href="/register">註冊</a>
+    </button>
   <% } %>
 </div>

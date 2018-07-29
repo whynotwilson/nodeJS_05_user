@@ -9,6 +9,10 @@ strong {
   display: inline-block;
 }
 
+.menu {
+  margin-bottom: 40px;
+}
+
 .content-left > button {
   display: block;
   margin: auto;
@@ -20,3 +24,16 @@ strong {
   margin: 0;
   display: inline-block;
 }
+
+a:link{
+  color: blue;
+  text-decoration:none; /* 去除底線 */
+  }
+
+  a:visited{
+  color: blue;
+  }
+
+  a:active{
+  color:blue ;
+  }
