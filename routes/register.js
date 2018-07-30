@@ -6,10 +6,12 @@ const sha1 = require('sha1')
 const checkNotLogin = require('../middlewares/check').checkNotLogin
 const UserModel = require('../models/users')
 
+// GET /register 註冊頁
 router.get('/', checkNotLogin, function (req, res, next) {
   res.render('register', {user: false})
 })
 
+// POST /register 執行註冊
 router.post('/', checkNotLogin, function (req, res, next) {
   const account = req.fields.account
   let password = req.fields.password

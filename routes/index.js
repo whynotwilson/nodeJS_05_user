@@ -1,4 +1,5 @@
 module.exports = function (app) {
+  // GET /root 首頁
   app.get('/', function (req, res, next) {
     // res.redirect('member')
     res.render('root')

@@ -5,10 +5,12 @@ const router = express.Router()
 const checkNotLogin = require('../middlewares/check').checkNotLogin
 const UserModel = require('../models/users')
 
+// GET /login 登入頁
 router.get('/', checkNotLogin, function (req, res, next) {
   res.render('login')
 })
 
+// POST /login 執行登入
 router.post('/', checkNotLogin, function (req, res, next) {
   const account = req.fields.account
   const password = req.fields.password

@@ -9,6 +9,10 @@ strong {
   display: inline-block;
 }
 
+img {
+  max-width: 50%;
+}
+
 .menu {
   margin-bottom: 40px;
 }
