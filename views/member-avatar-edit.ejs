@@ -1,10 +1,10 @@
 <%- include('header') %>
   <%- include('components/content-left') %>
-  資料編輯
   <div class="content-right">
-    <form action="POST">
+    <form method="POST" enctype="multipart/form-data">
       <img src= <%= img %> alt="avatar">
       <input type="file" name="avatar">
+      <button type="submit">更新</button>
     </form>
   </div>
 </body>

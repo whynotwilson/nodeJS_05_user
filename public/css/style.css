@@ -22,6 +22,10 @@ img {
   margin: auto;
 }
 
+form > img, form > input, form > button {
+  display: block;
+}
+
 .content-right {
   max-width: 40%;
   border: 1px solid black;

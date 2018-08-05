@@ -13,11 +13,18 @@ module.exports = {
       .exec()
   },
 
-  updateDataByAccount: function updateDataByAccount (account, user) {
+  // 更新資料
+  editDataByAccount: function updateDataByAccount (account, email) {
     return User
-      .update({account: account}, user, function (err) {
-        console.log(err)
-      })
+      .update({'account': account}, {'email': email})
+      .exec()
+  },
+
+  // 更新頭像
+  editAvatarByAccount: function updateDataByAccount (account, newAvatar) {
+    return User
+      .update({'account': account}, {'avatar': newAvatar})
       .exec()
   }
+
 }
