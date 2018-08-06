@@ -55,9 +55,9 @@ router.get('/avatarEdit', checkLogin, function (req, res, next) {
 
 // POST /member/avatarEdit 執行更新頭像
 router.post('/avatarEdit', checkLogin, function (req, res, next) {
-  // 取得舊頭像的路徑
   var oldAvatar = __dirname.split(path.sep) // 取得目前路徑並切割成 array
-  oldAvatar.pop() // 將最後一個刪除 // routes
+  oldAvatar.pop()
+  // 取得舊頭像的路徑
   oldAvatar = oldAvatar.join('/') + '/public/img/' + req.session.user.avatar
 
   const newAvatar = req.files.avatar.path.split(path.sep).pop()
@@ -77,7 +77,7 @@ router.post('/avatarEdit', checkLogin, function (req, res, next) {
     .then(function () {
       req.flash('success', '頭像更新成功')
       req.session.user.avatar = newAvatar // 更新 session 資訊
-      fs.unlink(oldAvatar)
+      fs.unlink(oldAvatar) // 刪除舊頭像
       res.redirect('back')
     })
     .catch(next)
